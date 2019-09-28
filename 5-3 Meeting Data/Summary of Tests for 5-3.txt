@@ -1,0 +1,11 @@
+Corners:
+	-Direct: T = 2455.72s, Propulsion Used = 34.0917N
+	-Along Path: T = 3386.25s, Propulsion Used = 48.2251N
+
+Down Channel:
+	-Direct: T = 784.22s, Propulsion Used = 16.8976N
+	-Along Path: T = 1230.57s, Propulsion Used = 24.8918N
+
+Up Channel:
+	-Direct: T = 655.99s, Propulsion Used = 9.6046N
+	-Along Path: T = 867.17s, Propulsion Used = 17.4544N
