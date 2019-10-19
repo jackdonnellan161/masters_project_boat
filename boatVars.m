@@ -2,18 +2,18 @@
 %Sim Init v1.0; 1/21/19
 %Run this script to initialize simulink params
 % close all; clear all; clc
-xs = [0:.01:2]; %m
-ys = [0:.01:1]; %m
+field.xs = [0:.01:2]; %m
+field.ys = [0:.01:1]; %m
 
-%% Velocity Field Definition
-rho_water = 1000;
-A_field = 0.01;
-a = 0;
-b = 1;
-f = a.*xs.^2 + b.*xs;
-dfdx = (2.*a.*xs + b)';
-U_field = (-pi.*A_field.*sin(pi.*f)'*cos(pi.*ys))'; %m/s
-V_field = (pi.*A_field.*dfdx.*cos(pi.*f)'*sin(pi.*ys))'; %m/s
+%% Velocity Field Definition (move this to a new function)
+field.rho_water = 1000;
+field.A_field = 0.01;
+field.a = 0;
+field.b = 1;
+f = field.a.*field.xs.^2 + field.b.*field.xs;
+dfdx = (2.*field.a.*field.xs + field.b)';
+U_field = (-pi.*field.A_field.*sin(pi.*f)'*cos(pi.*field.ys))'; %m/s
+V_field = (pi.*field.A_field.*dfdx.*cos(pi.*f)'*sin(pi.*field.ys))'; %m/s
 U_field_load = flipud(U_field);
 V_field_load = flipud(V_field);
 % 
@@ -27,7 +27,7 @@ U_field= zeros(size(U_field));
 V_field= zeros(size(V_field));
 U_field_load= zeros(size(U_field));
 V_field_load= zeros(size(V_field));
-quiver(xs,ys,U_field,V_field)
+quiver(field.xs,field.ys,U_field,V_field)
 
 nx = 200;
 ny = nx;
@@ -37,16 +37,16 @@ lambda_field = 10000*field_scale;
 D = .200;
 F = 100;
 R = 0.02;
-f = ys.*10^-13;
+f = field.ys.*10^-13;
 alpha = D/R*10^-13;
 gamma_field = F*pi/R/b_field;
 n = 0.01;
 
 
-xs = linspace(0,lambda_field,nx);
-ys = linspace(0,b_field,ny);
-% Psi_in = gamma_field.*(b_field/pi)^2.*sin(pi.*ys'./b_field)*...
-%     [exp((xs-lambda_field).*pi/b_field) + exp(-xs.*pi./b_field)- 1];
+field.xs = linspace(0,lambda_field,nx);
+field.ys = linspace(0,b_field,ny);
+% Psi_in = gamma_field.*(b_field/pi)^2.*sin(pi.*field.ys'./b_field)*...
+%     [exp((field.xs-lambda_field).*pi/b_field) + exp(-field.xs.*pi./b_field)- 1];
 % A = -alpha/2 + sqrt(alpha^2/4 + n^2);
 % B = -alpha/2 - sqrt(alpha^2/4 + n^2);
 
@@ -60,18 +60,18 @@ B = -0.2;
 
 p = (1 - exp(B.*lambda_field))./(exp(A.*lambda_field)-exp(B.*lambda_field));
 q = 1-p;
-Psi_in = gamma_field.*(b_field/pi)^2.*sin(pi.*ys'./b_field)*...
-    (p.*exp(A.*xs) + q.*exp(B.*xs)- 1);
+Psi_in = gamma_field.*(b_field/pi)^2.*sin(pi.*field.ys'./b_field)*...
+    (p.*exp(A.*field.xs) + q.*exp(B.*field.xs)- 1);
 
 figure
-contour(xs,ys,Psi_in,10)
+contour(field.xs,field.ys,Psi_in,10)
 
 U_field = zeros(size(Psi_in));
 V_field = zeros(size(Psi_in));
 
 
-for ii = 2:length(xs)-1
-    for jj = 2:length(ys)-1
+for ii = 2:length(field.xs)-1
+    for jj = 2:length(field.ys)-1
         V_field(ii ,jj) = -(Psi_in (ii,jj+1) - Psi_in (ii,jj-1)) ./ (2*b_field/ny);
         U_field(ii, jj) = (Psi_in (ii+1,jj) - Psi_in (ii-1,jj)) ./ (2*lambda_field/nx);        
     end
@@ -93,32 +93,32 @@ v_scale_flow = v_max/max(max(max(U_field)),max(max(V_field)));
 U_field_load = v_scale_flow.*U_field;
 V_field_load = v_scale_flow.*V_field;
 
-%% MC Setup
-E3 = E3_test(U_field,V_field);
+%% MC Setup (move this to a new function)
+E3 = E3_test(U_field,V_field,lambda_field./nx,b_field./ny);
 monte_carlo_get_points()
-xy = combvec([1:1:length(xs)],[1:1:length(ys)])';
+xy = combvec([1:1:length(field.xs)],[1:1:length(field.ys)])';
 
 % figure
-% contour(xs,ys,U_field)
+% contour(field.xs,field.ys,U_field)
 % figure
-% contour(xs,ys,V_field)
+% contour(field.xs,field.ys,V_field)
 % figure
-% quiver(xs,ys,U_field_load,V_field_load)
+% quiver(field.xs,field.ys,U_field_load,V_field_load)
 
-% [X,Y] = meshgrid(xs,ys);
-% STARTXY = combvec(xs,ys);
+% [X,Y] = meshgrid(field.xs,field.ys);
+% STARTXY = combvec(field.xs,field.ys);
 % figure
 % streamline(X,Y,U_field_load,V_field_load,STARTXY(1,1:2:end),STARTXY(1,1:2:end))
 
-% quiver(xs,ys,U_field,V_field);
+% quiver(field.xs,field.ys,U_field,V_field);
 %% Boat Params
 m_boat = 0.120; %kg
 l_boat = 0.16; %m
 w_boat = 0.08; %m
 depth_boat = 0.06; %m
-ma_x = pi*rho_water*(w_boat/2)^2*(depth_boat); %kg
-ma_y = pi*rho_water*(l_boat/2)^2*(depth_boat); %kg
-Izz_a = rho_water*((l_boat/2)^2-(w_boat/2)^2)^2*depth_boat; %kg * m^2
+ma_x = pi*field.rho_water*(w_boat/2)^2*(depth_boat); %kg
+ma_y = pi*field.rho_water*(l_boat/2)^2*(depth_boat); %kg
+Izz_a = field.rho_water*((l_boat/2)^2-(w_boat/2)^2)^2*depth_boat; %kg * m^2
 % Izz_boat = 3e-2; %kg*m
 Izz_boat = 1; %kg*m
 d_motors = w_boat-0.02; %distance between the centers of motor shafts, m
@@ -147,7 +147,7 @@ kpy = 1;
 kix = 0.1;
 kiy = 0.1;
 
-%% Sim Params
+%% Sim Params (move this to a new function)
 dt = 0.01;
 use_imu_model = 0;
 xd = 1.5;
@@ -170,7 +170,7 @@ thrust_disable_thresh = 1;
 rot_disable_thresh = 0.0;
 cte_disable_thresh = 100;
 
-%% Boat IC Definition
+%% Boat IC Definition (move this to a new function)
 % x0_boat = [1 0.5]; %m
 x0_boat = waypoints_load(1,:); %m
 v0_boat = [0 0]; %m/s
