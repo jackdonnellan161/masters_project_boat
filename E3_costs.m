@@ -1,4 +1,4 @@
-function E3 = E3_test(U_field,V_field,x_dist,y_dist)
+function E3 = E3_costs(U_field,V_field,x_dist,y_dist)
     len_x = length(V_field(1,:));
     len_y = length(V_field(:,1));
     E3 = zeros(len_x*len_y*8,3);
