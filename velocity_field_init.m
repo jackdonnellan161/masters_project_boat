@@ -1,8 +1,6 @@
 function [U_field,V_field,U_field_load,V_field_load] = velocity_field_init(field_str, param_struct)
-    U_field = zeros(length(param_struct.xs),length(param_struct.ys));
-    V_field = zeros(length(param_struct.xs),length(param_struct.ys));
-    U_field_load = zeros(length(param_struct.xs),length(param_struct.ys));
-    V_field_load = zeros(length(param_struct.xs),length(param_struct.ys));
+    U_field = zeros(length(param_struct.ys),length(param_struct.xs));
+    V_field = zeros(length(param_struct.ys),length(param_struct.xs));
     switch field_str
         case 'no_flow'
             
@@ -14,11 +12,12 @@ function [U_field,V_field,U_field_load,V_field_load] = velocity_field_init(field
             
         case 'QG_flow'
             
-            
-            
+        case 'uniform'
+            U_field = 0.05*ones(size(U_field));
+            V_field = zeros(size(V_field));
             
     end
             
-    U_field_load = flipud(U_field);
-    V_field_load = flipud(V_field);
+    U_field_load = V_field;
+    V_field_load = U_field;
 end

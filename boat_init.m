@@ -13,15 +13,16 @@ boat.Ay = boat.depth*boat.length; %m^2
 %% Mass/Inertias
 boat.m = 0.120; %kg
 boat.added_mass_x = pi*rho*(boat.width/2)^2*(boat.depth); %kg
-boat.added_mass_y = pi*rho*(boat.length/2)^2*(boat.depth); %kg
+boat.added_mass_y = boat.added_mass_x;
+% boat.added_mass_y = pi*rho*(boat.length/2)^2*(boat.depth); %kg
 boat.Izz = 1; %kg*m
 boat.added_Izz = rho*((boat.length/2)^2-(boat.width/2)^2)^2*boat.depth; %kg * m^2
 
 %% "Aero" Params
 switch aero_case
     case 'asym_point_particle'
-        boat.cdx = 0.1;
-        boat.cdy = 0.5;
+        boat.cdx = 1;
+        boat.cdy = 1;
         boat.k_drag_para = 1; 
         boat.k_drag_perp = 1; 
         boat.k_drag_rot = 0.4;
