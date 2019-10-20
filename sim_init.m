@@ -8,7 +8,7 @@ field.A_field = 0.01;
 field.a = 0;
 field.b = 1;
 
-[field.U,field.V,loadables.U_field,loadables.V_field] = velocity_field_init('no_flow', field);
+[field.U,field.V,loadables.U_field,loadables.V_field] = velocity_field_init('gyre', field);
 
 %% Init Boat
 boat = boat_init('asym_point_particle',field.rho_water);
@@ -31,9 +31,9 @@ constants.dtor = pi/180;
 
 %Boat IC Definition
 % boat.x0 = waypoints_load(1,:); %m
-boat.x0 = [1 0.5]; %m, overwritten if 'user_defined' waypoints
+boat.x0 = [1.1 0.1]; %m, overwritten if 'user_defined' waypoints
 boat.xd = [1 1]; %m, overwritten if 'user_defined' waypoints
-boat.v0 = [1 0]; %m/s
+boat.v0 = [0 0]; %m/s
 boat.v0_mag = norm(boat.v0);
 boat.a0 = [0 0]; %m/s^2
 boat.alpha0 = 0;
