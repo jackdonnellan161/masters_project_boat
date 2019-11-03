@@ -1,11 +1,11 @@
 function E3 = E3_costs(U_field,V_field,x_dist,y_dist)
-    len_x = length(V_field(1,:));
-    len_y = length(V_field(:,1));
+    len_x = length(V_field(:,1));
+    len_y = length(V_field(1,:));
     E3 = zeros(len_x*len_y*8,3);
     for ii = 1:len_x*len_y
 %             ii
-            V = [U_field(len_y-floor((ii-1)/len_y),mod(ii-1,len_x)+1)...
-                V_field(len_y-floor((ii-1)/len_y),mod(ii-1,len_x)+1)];
+            V = [U_field(len_x-floor((ii-1)/len_x),mod(ii-1,len_y)+1)...
+                V_field(len_x-floor((ii-1)/len_x),mod(ii-1,len_y)+1)];
             if norm(V) ~= 0
                 uv_cell_array{ii} = V / norm(V);
             else

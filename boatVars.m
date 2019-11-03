@@ -23,10 +23,10 @@ V_field_load = flipud(V_field);
 % V_field_load = flipud(V_field);
 
 % Uncomment to zero out field
-U_field= zeros(size(U_field));
-V_field= zeros(size(V_field));
-U_field_load= zeros(size(U_field));
-V_field_load= zeros(size(V_field));
+% U_field= zeros(size(U_field));
+% V_field= zeros(size(V_field));
+% U_field_load= zeros(size(U_field));
+% V_field_load= zeros(size(V_field));
 quiver(field.xs,field.ys,U_field,V_field)
 
 nx = 200;
