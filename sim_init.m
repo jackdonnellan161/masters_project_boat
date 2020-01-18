@@ -31,8 +31,8 @@ constants.dtor = pi/180;
 
 %Boat IC Definition
 % boat.x0 = waypoints_load(1,:); %m
-boat.x0 = [1 0.4]; %m, overwritten if 'user_defined' waypoints
-boat.xd = [1 0.5]; %m, overwritten if 'user_defined' waypoints
+boat.x0 = [1.1 0.5]; %m, overwritten if 'user_defined' waypoints
+boat.xd = [0.7 0.6]; %m, overwritten if 'user_defined' waypoints
 boat.v0 = [0 0]; %m/s
 boat.v0_mag = norm(boat.v0);
 boat.a0 = [0 0]; %m/s^2
@@ -55,7 +55,7 @@ switch waypoints_str
 end
 
 %% Plots
-figure
-scatter(sim.waypoints(:,1),sim.waypoints(:,2))
-figure
-quiver(field.xs,field.ys,field.U,field.V)
+% figure
+% scatter(sim.waypoints(:,1),sim.waypoints(:,2))
+% figure
+% quiver(field.xs,field.ys,field.U,field.V)

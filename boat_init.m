@@ -37,4 +37,7 @@ end
 
 %% Prop System
 boat.Vmax = 0.2; %m/s
-boat.Tmax = 0.5*(0.5*rho*boat.Vmax^2*boat.k_drag_para*boat.Ax); %N
+%boat.Tmax = 0.5*(0.5*rho*boat.Vmax^2*boat.k_drag_para*boat.Ax); %N 
+%Tmax for non-linear drag model, current model uses linear drag so this
+%thrust is insufficient by ~ a factor of 4
+boat.Tmax = boat.Vmax.*boat.k_drag_para/2;
