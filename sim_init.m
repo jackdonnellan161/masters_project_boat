@@ -19,12 +19,12 @@ boat = boat_init('asym_point_particle',field.rho_water);
 
 %% Init Sim
 %Sim Parameters
-sim.dt = 0.005;
-sim.xdot_d = 0.10;
-sim.allow_disable = 0;
-sim.thrust_disable_thresh = 0; 
-sim.rot_disable_thresh = 0.0;
-sim.cte_disable_thresh = 100;
+simu.dt = 0.005;
+simu.xdot_d = 0.10;
+simu.allow_disable = 0;
+simu.thrust_disable_thresh = 0; 
+simu.rot_disable_thresh = 0.0;
+simu.cte_disable_thresh = 100;
 
 %Constants
 constants.rtod = 180/pi;
@@ -43,20 +43,20 @@ boat.theta_dot0 = 0; %rad/s
 boat.theta_ddot0 = 0; %rad/s^2
 
 % Waypoints
-waypoints_str = 'user_defined';
+waypoints_str = 'my_efficient_path';
 switch waypoints_str
     case 'user_defined'
-        sim.waypoints = [[0.01 0.01]; boat.xd];
+        simu.waypoints = [[0.01 0.01]; boat.xd];
     case 'my_efficient_path'
-        [sim.waypoints,sim.predicted_cost] = gen_my_efficient_path(field,boat);
+        [simu.waypoints,simu.predicted_cost] = gen_my_efficient_path(field,boat);
     case 'ref_efficient_path'
         
 end
 
 %% Plots
 figure
-scatter(sim.waypoints(:,1),sim.waypoints(:,2))
+scatter(simu.waypoints(:,1),simu.waypoints(:,2))
 hold on
-scatter(sim.waypoints(1,1),sim.waypoints(1,2),'ro')
-scatter(sim.waypoints(end,1),sim.waypoints(end,2),'rx')
+scatter(simu.waypoints(1,1),simu.waypoints(1,2),'ro')
+scatter(simu.waypoints(end,1),simu.waypoints(end,2),'rx')
 quiver(field.xs,field.ys,field.U,field.V)
