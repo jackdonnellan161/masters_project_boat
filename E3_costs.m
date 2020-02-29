@@ -1,24 +1,28 @@
 function E3 = E3_costs(U_field,V_field,x_dist,y_dist)
-    len_x = length(V_field(:,1));
-    len_y = length(V_field(1,:));
+    len_x = length(V_field(1,:));
+    len_y = length(V_field(:,1));
     E3 = zeros(len_x*len_y*8,3);
     for ii = 1:len_x*len_y
-%             ii
-            V = [U_field(len_x-floor((ii-1)/len_x),mod(ii-1,len_y)+1)...
-                V_field(len_x-floor((ii-1)/len_x),mod(ii-1,len_y)+1)];
-            if norm(V) ~= 0
-                uv_cell_array{ii} = V / norm(V);
-            else
-                uv_cell_array{ii} = V;
-            end
-            up_cell_array{ii} = [0;1];
-            down_cell_array{ii} = [0;-1];
-            right_cell_array{ii} = [1;0];
-            left_cell_array{ii} = [-1;0];
-            up_right_cell_array{ii} = [x_dist;y_dist]./sqrt(x_dist^2+y_dist^2);
-            up_left_cell_array{ii} = [-x_dist;y_dist]./sqrt(x_dist^2+y_dist^2);
-            down_right_cell_array{ii} = [x_dist;-y_dist]./sqrt(x_dist^2+y_dist^2);
-            down_left_cell_array{ii} = [-x_dist;-y_dist]./sqrt(x_dist^2+y_dist^2);
+        %Indicies is for checking that we are looping in the right order,
+        %think row/column from top left corner as opposed to x/y from
+        %bottom left corner
+        
+        indicies(ii,:) = [len_y-floor((ii-1)/len_x) mod(ii-1,len_x)+1];
+        V = [U_field(indicies(ii,1),indicies(ii,2)),...
+            V_field(indicies(ii,1),indicies(ii,2))];
+        if norm(V) ~= 0
+            uv_cell_array{ii} = V / norm(V);
+        else
+            uv_cell_array{ii} = V;
+        end
+        up_cell_array{ii} = [0;1];
+        down_cell_array{ii} = [0;-1];
+        right_cell_array{ii} = [1;0];
+        left_cell_array{ii} = [-1;0];
+        up_right_cell_array{ii} = [x_dist;y_dist]./sqrt(x_dist^2+y_dist^2);
+        up_left_cell_array{ii} = [-x_dist;y_dist]./sqrt(x_dist^2+y_dist^2);
+        down_right_cell_array{ii} = [x_dist;-y_dist]./sqrt(x_dist^2+y_dist^2);
+        down_left_cell_array{ii} = [-x_dist;-y_dist]./sqrt(x_dist^2+y_dist^2);
     end
 
 %     up_costs = cellfun(@(x,y) (-(x*y)+1)*y_dist,uv_cell_array,up_cell_array,...
@@ -107,6 +111,6 @@ function E3 = E3_costs(U_field,V_field,x_dist,y_dist)
                 jj = jj+1;
             end
     end
-    E3 = E3(1:jj-1,:);
+    E3 = real(E3(1:jj-1,:));
     
 end
